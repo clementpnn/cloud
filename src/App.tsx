@@ -1,6 +1,20 @@
-import handleSignInWithEmailAndPassword from "./services/auth"
+import { useForm, SubmitHandler  } from "react-hook-form"
+import app from "./services/utils/firebaseConfig"
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export default function App() {
+  const auth = getAuth(app);
+  const { register, handleSubmit } = useForm()
+  const onSubmit: SubmitHandler<Record<string, string>> = async (formData) => {
+    const { email, password } = formData;
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      console.log("User created:", userCredential.user);
+    } catch (error) {
+      console.error("Error creating user:", error);
+    }
+  };
   return (
     <>
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
@@ -17,7 +31,7 @@ export default function App() {
 
         <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-[480px]">
           <div className="bg-white px-6 py-12 shadow sm:rounded-lg sm:px-12">
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
               <div>
                 <label
                   htmlFor="email"
@@ -28,6 +42,7 @@ export default function App() {
                 <div className="mt-2">
                   <input
                     id="email"
+                    {...register("email")}
                     name="email"
                     type="email"
                     autoComplete="email"
@@ -47,6 +62,7 @@ export default function App() {
                 <div className="mt-2">
                   <input
                     id="password"
+                    {...register("password")}
                     name="password"
                     type="password"
                     autoComplete="current-password"
@@ -59,10 +75,6 @@ export default function App() {
               <div>
                 <button
                   type="submit"
-                  onClick={() => {
-                    "use server";
-                    handleSignInWithEmailAndPassword("email", "password");
-                  }}
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
                   Sign in
