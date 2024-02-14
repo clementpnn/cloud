@@ -1,8 +1,7 @@
 import { useForm, SubmitHandler  } from "react-hook-form"
-import app from "./services/utils/firebaseConfig"
+import app from "../services/utils/firebaseConfig"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, getFirestore } from "firebase/firestore";
-// import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export default function App() {
   const auth = getAuth(app);
