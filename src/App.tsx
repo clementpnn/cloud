@@ -1,16 +1,24 @@
 import { useForm, SubmitHandler  } from "react-hook-form"
 import app from "./services/utils/firebaseConfig"
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
 // import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 export default function App() {
   const auth = getAuth(app);
+  const db = getFirestore(app)
   const { register, handleSubmit } = useForm()
   const onSubmit: SubmitHandler<Record<string, string>> = async (formData) => {
     const { email, password } = formData;
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      console.log("User created:", userCredential.user);
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
+      const data = {
+        email: userCredential.user.email,
+        uid: userCredential.user.uid,
+        role: "client"
+      }
+      const docRef = doc(db, "user", userCredential.user.uid)
+      setDoc(docRef, data)
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -25,7 +33,7 @@ export default function App() {
             alt="Go Cloud"
           />
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in to your account
+            Sign in
           </h2>
         </div>
 
