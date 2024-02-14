@@ -1,18 +1,21 @@
 import { RootRoute, Route, Router } from "@tanstack/react-router"
-import Signin from "@/pages/Signin"
+import SigninCustomer from "@/pages/SignInCustomer"
+import SignInSeller from "@/pages/SignInSeller"
 import Login from "@/pages/Login"
 import ClientHomepage from "@/pages/ClientHomepage"
 import AdminHomepage from "@/pages/AdminHomepage"
 
 const rootRoute = new RootRoute()
 
-const SigninRoute = new Route({ getParentRoute: () => rootRoute, path: "/", component: Signin })
+const SigninCustomerRoute = new Route({ getParentRoute: () => rootRoute, path: "/", component: SigninCustomer })
+const SigninSellerRoute = new Route({ getParentRoute: () => rootRoute, path: "/signin", component: SignInSeller })
 const LoginRoute = new Route({ getParentRoute: () => rootRoute, path: "/login", component: Login })
-const ClientHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/client", component: ClientHomepage })
-const AdminHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/admin", component: AdminHomepage })
+const ClientHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/customer", component: ClientHomepage })
+const AdminHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller", component: AdminHomepage })
 
 const routeTree = rootRoute.addChildren([
-  SigninRoute,
+  SigninCustomerRoute,
+  SigninSellerRoute,
   LoginRoute,
   ClientHomepageRoute,
   AdminHomepageRoute

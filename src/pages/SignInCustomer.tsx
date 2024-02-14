@@ -1,33 +1,31 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import app from "../services/utils/firebaseConfig";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, query, where } from "firebase/firestore";
-import { useNavigate } from "@tanstack/react-router";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc, getFirestore } from "firebase/firestore";
+import { Link } from "@tanstack/react-router";
 import { useLaunchConfetti } from "@/hooks/useLunchConfetti";
 
-export default function Login() {
-  const navigate = useNavigate({ from: "/login" });
+export default function SigninCustomer() {
   const auth = getAuth(app);
   const db = getFirestore(app);
   const { register, handleSubmit } = useForm();
   const onSubmit: SubmitHandler<Record<string, string>> = async (formData) => {
     const { email, password } = formData;
     try {
-      const userCredential = await signInWithEmailAndPassword(
+      const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      console.log("connected", userCredential);
-      //! revoir le code en dessous qui vérifie si l'user à un role ou pas la c'est pas bon
-      const user = collection(db, "user");
-      if (query(user, where("role", "!=", "customer"))) {
-        navigate({ to: "/customer" });
-      } else {
-        navigate({ to: "/seller" });
-      }
+      const data = {
+        email: userCredential.user.email,
+        uid: userCredential.user.uid,
+        role: "customer",
+      };
+      const docRef = doc(db, "user", userCredential.user.uid);
+      setDoc(docRef, data);
     } catch (error) {
-      console.error("Error login : ", error);
+      console.error("Error creating user:", error);
     }
   };
   return (
@@ -35,12 +33,12 @@ export default function Login() {
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
-            className="mx-auto h-10 w-auto"
-            src="https://cdn-icons-png.flaticon.com/512/149/149209.png"
+            className="mx-auto h-40 w-auto"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaAIQE3OWwsMoF5iYqRiMC5aZhXcR1LL8eRNucNYfAWU37YYuqdQqQezWivg&s"
             alt="Go Cloud"
           />
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Log in
+            Customer sign in
           </h2>
         </div>
 
@@ -85,6 +83,13 @@ export default function Login() {
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
+                <Link to="/signin" className="text-indigo-600">
+                  Sign up as a seller
+                </Link>
+                <br />
+                <Link to="/login" className="text-indigo-600">
+                  Login
+                </Link>
               </div>
 
               <div>
