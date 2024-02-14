@@ -1,25 +1,28 @@
 import { useForm, SubmitHandler  } from "react-hook-form"
 import app from "../services/utils/firebaseConfig"
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import { doc, setDoc, getFirestore } from "firebase/firestore";
+import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, query, where } from "firebase/firestore";
+import { useNavigate } from "@tanstack/react-router";
 
-export default function Signin() {
+export default function Login() {
+  const navigate = useNavigate({ from: "/login" })
   const auth = getAuth(app);
   const db = getFirestore(app)
   const { register, handleSubmit } = useForm()
   const onSubmit: SubmitHandler<Record<string, string>> = async (formData) => {
     const { email, password } = formData;
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password)
-      const data = {
-        email: userCredential.user.email,
-        uid: userCredential.user.uid,
-        role: "client"
+      const userCredential = await signInWithEmailAndPassword(auth, email, password)
+      console.log("connected", userCredential)
+      //! revoir le code en dessous qui vérifie si l'user à un role ou pas la c'est pas bon
+      const user = collection(db, "user")
+      if (query(user, where("role", "!=", "client"))) {
+        navigate({ to: "/client" })
+      } else {
+        navigate({ to: "/admin" })
       }
-      const docRef = doc(db, "user", userCredential.user.uid)
-      setDoc(docRef, data)
     } catch (error) {
-      console.error("Error creating user:", error);
+      console.error("Error login : ", error);
     }
   };
   return (
@@ -32,7 +35,7 @@ export default function Signin() {
             alt="Go Cloud"
           />
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Sign in
+            Log in
           </h2>
         </div>
 
