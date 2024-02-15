@@ -36,7 +36,7 @@
                 image: url,
                 uid: uuidv4()
               };
-              const docRef = doc(db, "articles", uuidv4());
+              const docRef = doc(db, "articles", data.uid);
               await setDoc(docRef, data);
               toast("Your article has been created.")
             });
