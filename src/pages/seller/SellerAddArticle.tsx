@@ -7,6 +7,7 @@
   import { v4 as uuidv4 } from 'uuid';
   import { useState } from "react";
   import { toast } from 'sonner'
+  import { useNavigate } from "@tanstack/react-router";
 
   interface Data {
     name: string,
@@ -17,6 +18,7 @@
   }
 
   export default function SelletAddArticle() {
+    const navigate = useNavigate({ from:"/seller/add" })
     const [imageUpload, setImageUpload] = useState<File | null>(null);
     const db = getFirestore(app)
     const { register, handleSubmit } = useForm();
@@ -39,6 +41,7 @@
               const docRef = doc(db, "articles", data.uid);
               await setDoc(docRef, data);
               toast("Your article has been created.")
+              navigate({ to:"/seller" })
             });
         })
     }; 
