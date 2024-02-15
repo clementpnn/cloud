@@ -3,11 +3,6 @@ import { jwtDecode } from "jwt-decode";
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import useConfetti from "@/hooks/useConfetti";
-import useUser from "@/hooks/useUser";
-
-interface JwtPayload {
-  role: string;
-}
 
 const withAuth = <P extends object>(
   Component: React.ComponentType<P>,
@@ -15,13 +10,14 @@ const withAuth = <P extends object>(
 ): React.FC<P> => {
   return (props: P) => {
     const navigate = useNavigate();
-    const { token, role } = useUser();
+    const token = localStorage.getItem("token");
+    const role = localStorage.getItem("role");
 
     const [isAuthorized, setIsAuthorized] = useState(true);
 
     useEffect(() => {
       try {
-        jwtDecode<JwtPayload>(token);
+        jwtDecode(token as string);
       } catch (error) {
         navigate({ to: "/" });
         return;

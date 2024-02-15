@@ -4,11 +4,9 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useLaunchConfetti } from "@/hooks/useLunchConfetti";
-import useUser from "@/hooks/useUser";
 
 export default function Login() {
   const navigate = useNavigate({ from: "/login" });
-  const { setToken, setRole } = useUser();
   const auth = getAuth(app);
   const db = getFirestore(app);
   const { register, handleSubmit } = useForm();
@@ -23,10 +21,10 @@ export default function Login() {
       const userDocRef = doc(db, "user", userCredential.user.uid);
       const docSnapshot = await getDoc(userDocRef);
       const idToken = await userCredential.user.getIdToken();
-      setToken(idToken);
+      localStorage.setItem("token", idToken);
       if (docSnapshot.exists()) {
         const userData = docSnapshot.data();
-        setRole(userData.role);
+        localStorage.setItem("role", userData.role);
         if (userData.role === "customer") {
           navigate({ to: "/customer" });
         } else {
