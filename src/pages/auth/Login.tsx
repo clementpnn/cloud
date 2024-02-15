@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import app from "../services/utils/firebaseConfig";
+import app from "../../services/utils/firebaseConfig";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, doc, getDoc } from "firebase/firestore";
 import { Link, useNavigate } from "@tanstack/react-router";
