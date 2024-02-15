@@ -2,7 +2,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import app from "../services/utils/firebaseConfig";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { getFirestore, collection, query, where } from "firebase/firestore";
-import { useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useLaunchConfetti } from "@/hooks/useLunchConfetti";
 
 export default function Login() {
@@ -85,6 +85,13 @@ export default function Login() {
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
+                <Link to="/" className="text-indigo-600">
+                  Sign up as a customer
+                </Link>
+                <br />
+                <Link to="/signin" className="text-indigo-600">
+                  Sign up as a seller
+                </Link>
               </div>
 
               <div>
