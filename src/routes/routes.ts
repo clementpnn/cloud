@@ -1,7 +1,8 @@
 import { RootRoute, Route, Router } from "@tanstack/react-router"
-import SigninCustomer from "@/pages/SignInCustomer"
-import SignInSeller from "@/pages/SignInSeller"
-import Login from "@/pages/Login"
+import SigninCustomer from "@/pages/auth/SignInCustomer"
+import SignInSeller from "@/pages/auth/SignInSeller"
+import Login from "@/pages/auth/Login"
+import SellerAddArticle from "@/pages/seller/SellerAddArticle"
 import CustomerHomepage from "@/pages/CustomerHomepage"
 import SellerHomepage from "@/pages/SellerHomepage"
 import CustomerItem from "@/pages/CustomerItem"
@@ -17,6 +18,7 @@ const CustomerItemHomepageRoute = new Route({ getParentRoute: () => rootRoute, p
 // const CustomerHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/customer/profile", component: withAuth(page, "customer") })
 // const CustomerHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/customer/profile/update", component: withAuth(page, "customer") })
 const SellerHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller", component: withAuth(SellerHomepage, "seller") })
+const SellerAddArticleRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller/add", component: SellerAddArticle })
 // const SellerHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller/update", component: withAuth(page, "seller") })
 // const SellerHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller/profile", component: withAuth(page, "seller") })
 // const SellerHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller/profile/update", component: withAuth(page, "seller") })
@@ -25,6 +27,7 @@ const routeTree = rootRoute.addChildren([
   SigninCustomerRoute,
   SigninSellerRoute,
   LoginRoute,
+  SellerAddArticleRoute,
   CustomerHomepageRoute,
   SellerHomepageRoute,
   CustomerItemHomepageRoute

@@ -1,11 +1,11 @@
 import { useForm, SubmitHandler } from "react-hook-form";
-import app from "../services/utils/firebaseConfig";
+import app from "../../services/utils/firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, getFirestore } from "firebase/firestore";
 import { Link } from "@tanstack/react-router";
 import { useLaunchConfetti } from "@/hooks/useLunchConfetti";
 
-export default function SignInSeller() {
+export default function SigninCustomer() {
   const auth = getAuth(app);
   const db = getFirestore(app);
   const { register, handleSubmit } = useForm();
@@ -20,13 +20,13 @@ export default function SignInSeller() {
       const data = {
         email: userCredential.user.email,
         uid: userCredential.user.uid,
-        role: "seller",
+        role: "customer",
       };
       const docRef = doc(db, "user", userCredential.user.uid);
       const idToken = await userCredential.user.getIdToken();
       localStorage.setItem("token", idToken);
       setDoc(docRef, data);
-      localStorage.setItem("role", "seller");
+      localStorage.setItem("role", "customer");
     } catch (error) {
       console.error("Error creating user:", error);
     }
@@ -41,7 +41,7 @@ export default function SignInSeller() {
             alt="Go Cloud"
           />
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-            Seller sign in
+            Customer sign in
           </h2>
         </div>
 
@@ -100,8 +100,8 @@ export default function SignInSeller() {
                   Sign in
                 </button>
                 <div className="flex w-full justify-center flex-col items-center gap-y-3 pt-3">
-                  <Link to="/" className="text-indigo-600 font-bold">
-                    Sign up as a customer
+                  <Link to="/signin" className="text-indigo-600 font-bold">
+                    Sign up as a seller
                   </Link>
                   <Link to="/login" className="text-indigo-600 font-bold">
                     Login
