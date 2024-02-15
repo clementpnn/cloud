@@ -1,3 +1,4 @@
+import NavbarCustomer from "@/components/navbar/NavbarCustomer";
 import app from "@/services/utils/firebaseConfig";
 import { Tab } from "@headlessui/react";
 import { useParams } from "@tanstack/react-router";
@@ -41,6 +42,7 @@ export default function CustomerItem() {
   }, [id]);
   return (
     <div>
+      <NavbarCustomer />
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <div className="lg:grid lg:grid-cols-2 lg:items-start lg:gap-x-8">
           {/* Image gallery */}
