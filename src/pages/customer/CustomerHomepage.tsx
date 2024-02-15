@@ -2,6 +2,7 @@ import { collection, getDocs, getFirestore } from "firebase/firestore";
 import app from "@/services/utils/firebaseConfig";
 import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import NavbarCustomer from "@/components/navbar/NavbarCustomer";
 
 export default function CustomerHomepage() {
   const [articles, setArticles] = useState([
@@ -36,6 +37,7 @@ export default function CustomerHomepage() {
 
   return (
     <div>
+      <NavbarCustomer />
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <h2 id="products-heading" className="sr-only">
           Products
