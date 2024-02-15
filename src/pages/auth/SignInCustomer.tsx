@@ -23,7 +23,10 @@ export default function SigninCustomer() {
         role: "customer",
       };
       const docRef = doc(db, "user", userCredential.user.uid);
+      const idToken = await userCredential.user.getIdToken();
+      localStorage.setItem("token", idToken);
       setDoc(docRef, data);
+      localStorage.setItem("role", "customer");
     } catch (error) {
       console.error("Error creating user:", error);
     }

@@ -20,9 +20,11 @@ export default function Login() {
       );
       const userDocRef = doc(db, "user", userCredential.user.uid);
       const docSnapshot = await getDoc(userDocRef);
+      const idToken = await userCredential.user.getIdToken();
+      localStorage.setItem("token", idToken);
       if (docSnapshot.exists()) {
         const userData = docSnapshot.data();
-        console.log(userData);
+        localStorage.setItem("role", userData.role);
         if (userData.role === "customer") {
           navigate({ to: "/customer" });
         } else {
@@ -90,13 +92,6 @@ export default function Login() {
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
-                <Link to="/" className="text-indigo-600">
-                  Sign up as a customer
-                </Link>
-                <br />
-                <Link to="/signin" className="text-indigo-600">
-                  Sign up as a seller
-                </Link>
               </div>
 
               <div>
