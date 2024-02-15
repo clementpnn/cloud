@@ -28,6 +28,7 @@ export default function SigninCustomer() {
       const idToken = await userCredential.user.getIdToken();
       setToken(idToken);
       setDoc(docRef, data);
+      setRole("customer");
     } catch (error) {
       console.error("Error creating user:", error);
     }
