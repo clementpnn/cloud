@@ -4,14 +4,15 @@ import SignInSeller from "@/pages/SignInSeller"
 import Login from "@/pages/Login"
 import ClientHomepage from "@/pages/ClientHomepage"
 import AdminHomepage from "@/pages/AdminHomepage"
+import withAuth from "@/middleware/auth"
 
 const rootRoute = new RootRoute()
 
 const SigninCustomerRoute = new Route({ getParentRoute: () => rootRoute, path: "/", component: SigninCustomer })
 const SigninSellerRoute = new Route({ getParentRoute: () => rootRoute, path: "/signin", component: SignInSeller })
 const LoginRoute = new Route({ getParentRoute: () => rootRoute, path: "/login", component: Login })
-const ClientHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/customer", component: ClientHomepage })
-const AdminHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller", component: AdminHomepage })
+const ClientHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/customer", component: withAuth(ClientHomepage, "customer") })
+const AdminHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller", component: withAuth(AdminHomepage, "seller") })
 
 const routeTree = rootRoute.addChildren([
   SigninCustomerRoute,
