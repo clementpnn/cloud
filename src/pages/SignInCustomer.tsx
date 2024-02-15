@@ -83,13 +83,6 @@ export default function SigninCustomer() {
                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
-                <Link to="/signin" className="text-indigo-600">
-                  Sign up as a seller
-                </Link>
-                <br />
-                <Link to="/login" className="text-indigo-600">
-                  Login
-                </Link>
               </div>
 
               <div>
@@ -103,6 +96,14 @@ export default function SigninCustomer() {
                 >
                   Sign in
                 </button>
+                <div className="flex w-full justify-center flex-col items-center gap-y-3 pt-3">
+                  <Link to="/signin" className="text-indigo-600 font-bold">
+                    Sign up as a seller
+                  </Link>
+                  <Link to="/login" className="text-indigo-600 font-bold">
+                    Login
+                  </Link>
+                </div>
               </div>
             </form>
           </div>

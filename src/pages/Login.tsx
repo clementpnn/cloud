@@ -1,8 +1,8 @@
 import { useForm, SubmitHandler } from "react-hook-form";
 import app from "../services/utils/firebaseConfig";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
-import { getFirestore, collection, query, where } from "firebase/firestore";
-import { useNavigate } from "@tanstack/react-router";
+import { getFirestore, doc, getDoc } from "firebase/firestore";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { useLaunchConfetti } from "@/hooks/useLunchConfetti";
 
 export default function Login() {
@@ -18,13 +18,18 @@ export default function Login() {
         email,
         password
       );
-      console.log("connected", userCredential);
-      //! revoir le code en dessous qui vérifie si l'user à un role ou pas la c'est pas bon
-      const user = collection(db, "user");
-      if (query(user, where("role", "!=", "customer"))) {
-        navigate({ to: "/customer" });
+      const userDocRef = doc(db, "user", userCredential.user.uid)
+      const docSnapshot = await getDoc(userDocRef)
+      if (docSnapshot.exists()) {
+        const userData = docSnapshot.data()
+        console.log(userData)
+        if (userData.role==="customer") {
+          navigate({ to: "/customer" });
+        } else {
+          navigate({ to: "/seller" });
+        }
       } else {
-        navigate({ to: "/seller" });
+        console.log('No user data found.')
       }
     } catch (error) {
       console.error("Error login : ", error);
@@ -35,8 +40,8 @@ export default function Login() {
       <div className="flex min-h-full flex-1 flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
           <img
-            className="mx-auto h-10 w-auto"
-            src="https://cdn-icons-png.flaticon.com/512/149/149209.png"
+            className="mx-auto h-40 w-auto"
+            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaAIQE3OWwsMoF5iYqRiMC5aZhXcR1LL8eRNucNYfAWU37YYuqdQqQezWivg&s"
             alt="Go Cloud"
           />
           <h2 className="mt-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -96,8 +101,16 @@ export default function Login() {
                   }}
                   className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                 >
-                  Sign in
+                  Log in
                 </button>
+                <div className="flex w-full justify-center flex-col items-center gap-y-3 pt-3">
+                  <Link to="/signin" className="text-indigo-600 font-bold">
+                    Sign up as a seller
+                  </Link>
+                  <Link to="/" className="text-indigo-600 font-bold">
+                    Sign up as a customer
+                  </Link>
+                </div>
               </div>
             </form>
           </div>
