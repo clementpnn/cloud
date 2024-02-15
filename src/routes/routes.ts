@@ -8,6 +8,7 @@ import SellerHomepage from "@/pages/seller/SellerHomepage"
 import CustomerItem from "@/pages/customer/CustomerItem"
 import withAuth from "@/middleware/auth"
 import CustomerCart from "@/pages/customer/CustomerCart"
+import SellerItem from "@/pages/seller/SellerItem"
 
 const rootRoute = new RootRoute()
 
@@ -19,6 +20,7 @@ const CustomerItemHomepageRoute = new Route({ getParentRoute: () => rootRoute, p
 const CustomerCartRoute = new Route({ getParentRoute: () => rootRoute, path: "/customer/cart", component: withAuth(CustomerCart, "customer") })
 const SellerHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller", component: withAuth(SellerHomepage, "seller") })
 const SellerAddArticleRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller/add", component: SellerAddArticle })
+const sellerItemHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller/$id", component: withAuth(SellerItem, "seller") })
 // const SellerHomepageRoute = new Route({ getParentRoute: () => rootRoute, path: "/seller/update", component: withAuth(page, "seller") })
 
 const routeTree = rootRoute.addChildren([
@@ -29,6 +31,7 @@ const routeTree = rootRoute.addChildren([
   CustomerHomepageRoute,
   CustomerCartRoute,
   SellerHomepageRoute,
+  sellerItemHomepageRoute,
   CustomerItemHomepageRoute
 ])
 
