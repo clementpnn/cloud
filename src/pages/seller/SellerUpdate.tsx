@@ -34,6 +34,9 @@ export default function SellerUpdate() {
           formattedData[key] = data[key];
         }
       }
+      if (Object.keys(formattedData).length === 0) {
+        return toast("Please make sure to fill in at least one field before updating this article.");
+      }
       const docRef = doc(db, "articles", String(id));
       await updateDoc(docRef, formattedData);
       toast("Your article has been updated.")
