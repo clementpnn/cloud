@@ -2,7 +2,6 @@ import { jwtDecode } from "jwt-decode";
 
 import { useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import useConfetti from "@/hooks/useConfetti";
 
 const withAuth = <P extends object>(
   Component: React.ComponentType<P>,
@@ -32,8 +31,6 @@ const withAuth = <P extends object>(
     if (!isAuthorized) {
       return null;
     }
-
-    useConfetti();
 
     return <Component {...props} />;
   };
