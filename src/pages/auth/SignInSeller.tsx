@@ -4,6 +4,7 @@ import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, getFirestore } from "firebase/firestore";
 import { Link } from "@tanstack/react-router";
 import { useLaunchConfetti } from "@/hooks/useLunchConfetti";
+import { toast } from "sonner"
 
 export default function SignInSeller() {
   const auth = getAuth(app);
@@ -27,6 +28,7 @@ export default function SignInSeller() {
       localStorage.setItem("token", idToken);
       setDoc(docRef, data);
       localStorage.setItem("role", "seller");
+      toast("Seller account created.")
     } catch (error) {
       console.error("Error creating user:", error);
     }
