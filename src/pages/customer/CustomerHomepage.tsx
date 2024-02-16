@@ -1,7 +1,7 @@
-import { collection, getDocs, getFirestore } from "firebase/firestore";
-import app from "@/services/utils/firebaseConfig";
-import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
+import { useState, useEffect } from "react";
+import { getFirestore, collection, getDocs } from "firebase/firestore";
+import app from "@/services/utils/firebaseConfig"
 import NavbarCustomer from "@/components/navbar/NavbarCustomer";
 
 export default function CustomerHomepage() {
@@ -12,9 +12,8 @@ export default function CustomerHomepage() {
       description: "",
       image: "",
       price: "",
-    },
-  ]);
-
+    }
+  ])
   useEffect(() => {
     const fetchArticles = async () => {
       const db = getFirestore(app);
@@ -34,16 +33,14 @@ export default function CustomerHomepage() {
 
     fetchArticles();
   }, []);
-
-  return (
-    <div>
-      <NavbarCustomer />
-      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <h2 id="products-heading" className="sr-only">
-          Products
-        </h2>
-
-        <div className="grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
+  return(
+    <>
+      <div className="flex flex-col gap-y-[3.75rem]">
+        <NavbarCustomer />
+        <div className="flex flex-col gap-y-10 px-20">
+          <p className="text-3xl font-bold">Articles</p>
+        </div>
+        <div className="grid grid-cols-1 gap-x-6 gap-y-10 px-20 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
           {articles.map((article, index) => (
             <Link
               key={index}
@@ -69,6 +66,6 @@ export default function CustomerHomepage() {
           ))}
         </div>
       </div>
-    </div>
-  );
+    </>
+  )
 }
