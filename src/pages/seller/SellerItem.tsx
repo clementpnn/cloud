@@ -66,12 +66,14 @@ export default function SellerItem() {
                     Update
                   </button>
                 </Link>
-                <button
-                  type="button"
-                  className="flex w-full items-center justify-center rounded-md border border-transparent bg-red-50 px-8 py-3 text-base font-medium text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50"
-                >
-                  Delete
-                </button>
+                <Link to="/seller/delete/$id" params={{ id: article.uid }}>
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-center rounded-md border border-transparent bg-red-50 px-8 py-3 text-base font-medium text-red-700 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2 focus:ring-offset-gray-50"
+                  >
+                    Delete
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
