@@ -10,6 +10,10 @@ import { useState } from "react";
 import { toast } from 'sonner'
 import { useNavigate } from "@tanstack/react-router";
 
+type Data = {
+  [key: string]: string | number;
+};
+
 export default function SellerUpdate() {
   const { id } = useParams({ from:"/seller/update/$id" })
   const navigate = useNavigate({ from:"/seller/update/$id" })
@@ -18,25 +22,48 @@ export default function SellerUpdate() {
   const { register, handleSubmit } = useForm();
   const onSubmit: SubmitHandler<FieldValues> = async (formData) => {
     const { name, description, price } = formData
-    if (imageUpload === null) return
-    const storage = getStorage(app)
-    const imageRef = ref(storage, `images/${imageUpload.name + uuidv4() }`)
-    uploadBytes(imageRef, imageUpload)
-      .then(async() => {
-        await getDownloadURL(imageRef)
-          .then(async(url) => {
-            const data = {
-              name,
-              description,
-              price,
-              image: url
-            };
-            const docRef = doc(db, "articles", String(id));
-            await updateDoc(docRef, data);
-            toast("Your article has been updated.")
-            navigate({ to:"/seller/$id" })
-          });
-      })
+    if (imageUpload === null) {
+      const data: Data = {
+        name,
+        description,
+        price
+      };
+      const formattedData: Data = {};
+      for (const key in data) {
+        if (data[key] !== "") {
+          formattedData[key] = data[key];
+        }
+      }
+      const docRef = doc(db, "articles", String(id));
+      await updateDoc(docRef, formattedData);
+      toast("Your article has been updated.")
+      navigate({ to:"/seller/$id" })
+    } else {
+      const storage = getStorage(app)
+      const imageRef = ref(storage, `images/${imageUpload.name + uuidv4() }`)
+      uploadBytes(imageRef, imageUpload)
+        .then(async() => {
+          await getDownloadURL(imageRef)
+            .then(async(url) => {
+              const data: Data = {
+                name,
+                description,
+                price,
+                image: url
+              };
+              const formattedData: Data = {};
+              for (const key in data) {
+                if (data[key] !== "") {
+                  formattedData[key] = data[key];
+                }
+              }
+              const docRef = doc(db, "articles", String(id));
+              await updateDoc(docRef, formattedData);
+              toast("Your article has been updated.")
+              navigate({ to:"/seller/$id" })
+            });
+        })
+    }
   }; 
   return(
     <>
@@ -60,7 +87,6 @@ export default function SellerUpdate() {
                     {...register("name")}
                     name="name"
                     type="text"
-                    required
                     autoComplete="name"
                     className="outline-none px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -80,7 +106,6 @@ export default function SellerUpdate() {
                     {...register("description")}
                     name="description"
                     type="text"
-                    required
                     autoComplete="current-description"
                     className="outline-none px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
@@ -99,7 +124,6 @@ export default function SellerUpdate() {
                     id="price"
                     {...register("price")}
                     name="price"
-                    required
                     type="number"
                     autoComplete="current-description"
                     className="outline-none px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -119,7 +143,6 @@ export default function SellerUpdate() {
                     id="image"
                     {...register("image")}
                     name="image"
-                    required
                     type="file"
                     autoComplete="current-description"
                     className="outline-none px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
