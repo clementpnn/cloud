@@ -57,7 +57,7 @@ export default function CustomerItem() {
     };
 
     fetchData();
-  }, []);
+  }, [id, token]);
 
   return (
     <>
