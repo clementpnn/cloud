@@ -1,11 +1,12 @@
-import { useNavigate } from "@tanstack/react-router"
+import { useNavigate } from "@tanstack/react-router";
 
 export default function LogoutButton() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    navigate({ to:"/login" })
-  }
+    localStorage.removeItem("token");
+    navigate({ to: "/login" });
+    window.location.reload();
+  };
   return (
     <>
       <div>
@@ -17,5 +18,5 @@ export default function LogoutButton() {
         </button>
       </div>
     </>
-  )
+  );
 }
