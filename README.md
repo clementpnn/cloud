@@ -12,3 +12,9 @@ pnpm dev
 - Customer can read and add article to cart
 - Customer can see all his articles added to cart
 - Register login logout
+
+## Stack
+
+- React (vite)
+- Docker
+- Firebase (Authenfication, Firestore and Storage)
