@@ -15,6 +15,6 @@ pnpm dev
 
 ## Stack
 
-- React (vite)
+- React (vite & TS)
 - Docker
 - Firebase (Authenfication, Firestore and Storage)
