@@ -1,15 +1,18 @@
-FROM node:16-alpine
+FROM node:21-alpine
 
 RUN npm install -g pnpm
 
 WORKDIR /app
 
 COPY package.json .
+COPY pnpm-lock.yaml .
 
-RUN npm install
+RUN pnpm install
 
 COPY . .
 
-EXPOSE 3030
+RUN pnpm run build
 
-CMD ["pnpm", "dev"]
+EXPOSE 3000
+
+CMD ["pnpx", "serve", "-s", "dist", "-l", "3000"]
