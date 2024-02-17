@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import {
-  doc,
   getFirestore,
   collection,
   query,
@@ -43,27 +42,12 @@ export default function CustomerCart() {
         const articleRef = docs.data().itemID;
         const ref = query(
           collection(db, "articles"),
-          where("itemID", "==", articleRef)
+          where("uid", "==", articleRef)
         );
         const docSnap = await getDocs(ref);
-        console.log(docSnap.docs);
-
-        // if (docSnap.exists()) {
-        //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        //   // @ts-ignore
-        //   const articleData: {
-        //     name: string;
-        //     description: string;
-        //     image: string;
-        //     price: string;
-        //   } = docSnap.data();
-        //   fetchedArticles.push({
-        //     name: articleData.name,
-        //     description: articleData.description,
-        //     image: articleData.image,
-        //     price: articleData.price,
-        //   });
-        // }
+        for (const doc of docSnap.docs) {
+          fetchedArticles.push(doc.data() as Article);
+        }
       }
 
       setArticles(fetchedArticles);
