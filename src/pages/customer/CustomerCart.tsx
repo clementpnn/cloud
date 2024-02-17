@@ -61,7 +61,7 @@ export default function CustomerCart() {
       <div className="flex flex-col gap-y-[3.75rem]">
         <NavbarCustomer />
         <div className="flex flex-col gap-y-10 px-20">
-          <p className="text-3xl font-bold">Articles</p>
+          <p className="text-3xl font-bold">Cart</p>
         </div>
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 px-20 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
           {articles.map((article, index) => (
