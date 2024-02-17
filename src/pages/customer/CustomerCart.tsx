@@ -39,28 +39,31 @@ export default function CustomerCart() {
       const querySnapshot = await getDocs(q);
       const fetchedArticles: Article[] = [];
 
-      for (const doc of querySnapshot.docs) {
-        const articleRef = doc.data().itemID;
-        console.log(articleRef);
-        const articleDoc = await doc(db, "articles", articleRef);
-        console.log(articleDoc);
+      for (const docs of querySnapshot.docs) {
+        const articleRef = docs.data().itemID;
+        const ref = query(
+          collection(db, "articles"),
+          where("itemID", "==", articleRef)
+        );
+        const docSnap = await getDocs(ref);
+        console.log(docSnap.docs);
 
-        if (articleDoc.exists()) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-ignore
-          const articleData: {
-            name: string;
-            description: string;
-            image: string;
-            price: string;
-          } = articleDoc.data();
-          fetchedArticles.push({
-            name: articleData.name,
-            description: articleData.description,
-            image: articleData.image,
-            price: articleData.price,
-          });
-        }
+        // if (docSnap.exists()) {
+        //   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        //   // @ts-ignore
+        //   const articleData: {
+        //     name: string;
+        //     description: string;
+        //     image: string;
+        //     price: string;
+        //   } = docSnap.data();
+        //   fetchedArticles.push({
+        //     name: articleData.name,
+        //     description: articleData.description,
+        //     image: articleData.image,
+        //     price: articleData.price,
+        //   });
+        // }
       }
 
       setArticles(fetchedArticles);
