@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import {
+  doc,
   getFirestore,
   collection,
-  getDoc,
   query,
   where,
   getDocs,
@@ -37,12 +37,13 @@ export default function CustomerCart() {
         where("userID", "==", decoded.user_id)
       );
       const querySnapshot = await getDocs(q);
-
       const fetchedArticles: Article[] = [];
 
       for (const doc of querySnapshot.docs) {
         const articleRef = doc.data().itemID;
-        const articleDoc = await getDoc(articleRef);
+        console.log(articleRef);
+        const articleDoc = await doc(db, "articles", articleRef);
+        console.log(articleDoc);
 
         if (articleDoc.exists()) {
           // eslint-disable-next-line @typescript-eslint/ban-ts-comment
