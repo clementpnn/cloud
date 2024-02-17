@@ -1,59 +1,72 @@
-import { Link } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
-import { getFirestore, collection, getDoc, getDocs } from "firebase/firestore";
+import {
+  getFirestore,
+  collection,
+  getDoc,
+  query,
+  where,
+  getDocs,
+} from "firebase/firestore";
 import app from "@/services/utils/firebaseConfig";
 import NavbarCustomer from "@/components/navbar/NavbarCustomer";
 import { jwtDecode } from "jwt-decode";
 
-type userToken = {
+type UserToken = {
   user_id: string;
 };
 
+type Article = {
+  name: string;
+  description: string;
+  image: string;
+  price: string;
+};
+
 export default function CustomerCart() {
-  const [userID, setUserID] = useState("");
-  const token = localStorage.getItem("token");
-  const [articles, setArticles] = useState([
-    {
-      name: "",
-      uid: "",
-      description: "",
-      image: "",
-      price: "",
-    },
-  ]);
+  const [articles, setArticles] = useState<Article[]>([]);
+
   useEffect(() => {
-    setUserID(jwtDecode<userToken>(token as string).user_id);
+    const decoded: UserToken = jwtDecode(
+      localStorage.getItem("token") as string
+    );
+
     const fetchArticles = async () => {
       const db = getFirestore(app);
-      const querySnapshot = await getDocs(
-        collection(db, "userID", userID, "cart")
+      const q = query(
+        collection(db, "cart"),
+        where("userID", "==", decoded.user_id)
       );
+      const querySnapshot = await getDocs(q);
+
+      const fetchedArticles: Article[] = [];
+
       for (const doc of querySnapshot.docs) {
         const articleRef = doc.data().itemID;
         const articleDoc = await getDoc(articleRef);
+
         if (articleDoc.exists()) {
-          const article = articleDoc.data() as {
-            price: string;
-            image: string;
-            description: string;
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const articleData: {
             name: string;
-          };
-          setArticles((prev) => [
-            ...prev,
-            {
-              uid: doc.id,
-              name: article.name,
-              description: article.description,
-              image: article.image,
-              price: article.price,
-            },
-          ]);
+            description: string;
+            image: string;
+            price: string;
+          } = articleDoc.data();
+          fetchedArticles.push({
+            name: articleData.name,
+            description: articleData.description,
+            image: articleData.image,
+            price: articleData.price,
+          });
         }
       }
+
+      setArticles(fetchedArticles);
     };
 
     fetchArticles();
-  }, [token, userID]);
+  }, []);
 
   return (
     <>
@@ -64,13 +77,8 @@ export default function CustomerCart() {
         </div>
         <div className="grid grid-cols-1 gap-x-6 gap-y-10 px-20 sm:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
           {articles.map((article, index) => (
-            <Link
-              key={index}
-              to="/customer/$id"
-              params={{ id: article.uid }}
-              className="group"
-            >
-              <div className="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-lg sm:aspect-h-3 sm:aspect-w-2">
+            <div key={index} className="group">
+              <div className="aspect-w-1 aspect-h-1 w-full overflow-hidden rounded-lg sm:aspect-w-2 sm:aspect-h-3">
                 <img
                   src={article.image}
                   alt={article.name}
@@ -84,7 +92,7 @@ export default function CustomerCart() {
               <p className="mt-1 text-sm italic text-gray-500">
                 {article.description}
               </p>
-            </Link>
+            </div>
           ))}
         </div>
       </div>
