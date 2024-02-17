@@ -5,6 +5,7 @@ import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { jwtDecode } from "jwt-decode";
+import { v4 as uuidv4 } from "uuid";
 
 type userToken = {
   user_id: string;
@@ -26,10 +27,10 @@ export default function CustomerItem() {
     const db = getFirestore(app);
     try {
       const data = {
-        userID: userID,
+        userID,
         itemID: id,
       };
-      const docRef = doc(db, "cart");
+      const docRef = doc(db, "cart", uuidv4());
       setDoc(docRef, data);
       toast("Item added to cart.");
     } catch (error) {
@@ -56,7 +57,7 @@ export default function CustomerItem() {
     };
 
     fetchData();
-  }, [id, token]);
+  }, []);
 
   return (
     <>
